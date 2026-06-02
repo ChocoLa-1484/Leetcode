@@ -15,7 +15,7 @@ public:
             int l2 = (mid2 == 0) ? INT_MIN : nums2[mid2 - 1];
             int r2 = (mid2 == n2) ? INT_MAX : nums2[mid2];
 
-            if (l1 < r2 && l2 < r1) {
+            if (l1 <= r2 && l2 <= r1) {
                 return (n % 2) ? max(l1, l2) : (double)((max(l1, l2) + min(r1, r2)) / 2.0); 
             }
 
