@@ -2,7 +2,7 @@ class Solution {
 public:
     TreeNode* createBinaryTree(vector<vector<int>>& descriptions) {
         TreeNode* ans = new TreeNode();
-        unordered_map <int, TreeNode*> nodes;
+        vector <TreeNode*> nodes(100005, nullptr);
         int root = 0;
         for (auto node : descriptions) {
             if (!nodes[node[0]]) {
