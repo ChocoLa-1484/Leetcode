@@ -1,0 +1,25 @@
+class Solution {
+public:
+    TreeNode* createBinaryTree(vector<vector<int>>& descriptions) {
+        TreeNode* ans = new TreeNode();
+        unordered_map <int, TreeNode*> nodes;
+        int root = 0;
+        for (auto node : descriptions) {
+            if (!nodes[node[0]]) {
+                nodes[node[0]] = new TreeNode(node[0]);
+                root ^= node[0];
+            }
+            if (!nodes[node[1]]) {
+                nodes[node[1]] = new TreeNode(node[1]);
+                root ^= node[1];
+            }
+            if (node[2]) {
+                nodes[node[0]]->left =  nodes[node[1]];
+            } else {
+                nodes[node[0]]->right =  nodes[node[1]];
+            }
+            root ^= node[1];
+        }
+        return nodes[root];
+    }
+};
