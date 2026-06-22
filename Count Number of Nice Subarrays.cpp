@@ -17,7 +17,6 @@ public:
         return sum;
     }
 };
-
 class Solution {
 public:
     int atMost(vector<int>& nums, int k) {
