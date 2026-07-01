@@ -23,7 +23,7 @@ public:
     int maximumUnits(vector<vector<int>>& boxTypes, int truckSize) {
         int freq[1005] = {};
         int maxN = -1;
-        for (auto b : boxTypes) {
+        for (const auto& b : boxTypes) {
             freq[b[1]] += b[0];
             maxN = max(maxN, b[1]);
         }
