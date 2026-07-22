@@ -98,28 +98,26 @@ auto init = []() {
     return 'c';
 }();
 
+template <typename T, auto f>
 class SparseTable {
 public:
-    vector<vector<int>> st;
-    function<int(int, int)> op;
-    SparseTable(const vector<int>& nums, function<int(int, int)> f) {
-        size_t n = nums.size();
-        op = f;
+    vector<vector<T>> st;
+    SparseTable(const vector<T>& nums) {
+        int n = nums.size();
         int w = __lg(n) + 1;
-        st.assign(w, vector<int>(n));
-        for (int i = 0; i < n; i++) {
+        st.assign(w, vector<T>(n));
+        for (int i = 0; i < n; i++)
             st[0][i] = nums[i];
-        }
         for (int i = 1; i < w; i++) {
             for (int j = 0; j + (1 << i) <= n; j++) {
-                st[i][j] = op(st[i - 1][j], st[i - 1][j + (1 << (i - 1))]);
+                st[i][j] = f(st[i - 1][j], st[i - 1][j + (1 << (i - 1))]);
             }
         }
     }
-    int query(int l, int r) { // [l, r)
-        if (l >= r) return 0;
+    T query(int l, int r) { // [l, r)
+        if (l >= r) return T{};
         int k = __lg(r - l);
-        return op(st[k][l], st[k][r - (1 << k)]);
+        return f(st[k][l], st[k][r - (1 << k)]);
     }
 };
 class Solution {
@@ -145,7 +143,9 @@ public:
         vector<int> tmp(m - 1); // sum of every two consecutive zeroBlocks
         for (int i = 0; i < m - 1; i++)
             tmp[i] = zeros[i] + zeros[i + 1];
-        SparseTable st_mx(tmp, [](int a, int b) { return max(a, b); });
+        SparseTable<int, [](int a, int b) constexpr {
+            return max(a, b);
+        }> st_mx(tmp);
         vector<int> ans(qn);
         int k = 0;
         for (const auto& q : queries) {
