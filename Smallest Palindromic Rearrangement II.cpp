@@ -19,15 +19,12 @@ public:
         vector<int> cnt(26, 0);
         for (int i = 0; i < n; i++)
             cnt[s[i] - 'a']++;
-        long long ways = count(cnt, n, k);
-        if (ways < k)    return "";
+        if (count(cnt, n, k) < k)    return "";
         string a = "";
-        int remain = n;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < 26; j++) {
                 if (!cnt[j]) continue;
-                long long nxt = ways;
-
+                cnt[j]--;
                 long long p = count(cnt, n - 1 - i, k);
                 if (k <= p) {
                     a.append(1, 'a' + j);
