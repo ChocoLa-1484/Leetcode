@@ -1,25 +1,21 @@
 class Solution {
 public:
     int search(vector<int>& nums, int target) {
-        int l = 0, r = nums.size() - 1;
-
-        while (l <= r) {
-            int mid = (l + r) >> 1;
-            if (nums[mid] == target)    return mid;
-            if (nums[l] <= nums[mid]) {
-                if (nums[l] <= target && target < nums[mid]) {
-                    r = mid - 1;
-                } else {
-                    l = mid + 1;
-                }
+        int n = nums.size();
+        int l = -1, r = n;
+        auto is_blue = [&](int i) {
+            int end = nums.back();
+            if (nums[i] > end) {
+                return target > end && nums[i] >= target;
             } else {
-                if (nums[mid] < target && target <= nums[r]) {
-                    l = mid + 1;
-                } else {
-                    r = mid - 1;
-                }
+                return target > end || nums[i] >= target;
             }
+        };
+        while (l + 1 < r) {
+            int mid = l + ((r - l) >> 1);
+            (is_blue(mid) ? r : l) = mid;
         }
-        return -1;
+        if (r == n || nums[r] != target)    return -1;
+        return r;
     }
 };
