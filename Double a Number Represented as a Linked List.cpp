@@ -1,0 +1,13 @@
+class Solution {
+public:
+    ListNode* doubleIt(ListNode* head) {
+        if (head->val > 4)
+            head = new ListNode(0, head);
+        for (auto cur = head; cur; cur = cur->next) {
+            cur->val = cur->val * 2 % 10;
+            if (cur->next && cur->next->val > 4)
+                cur->val++;
+        }
+        return head;
+    }
+};
