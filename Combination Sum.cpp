@@ -1,21 +1,24 @@
 class Solution {
 public:
-    vector<vector<int>> ans;
     vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
-        vector<int> v;
-        dfs(v, candidates, 0, target);
+        int n = candidates.size();
+        ranges::sort(candidates);
+        vector<vector<int>> ans;
+        vector<int> path;
+        auto dfs = [&](this auto&& dfs, int i) {
+            if (target == 0) {
+                ans.emplace_back(path);
+                return;
+            }
+            for (int j = i; j < n && candidates[j] <= target; j++) {
+                path.push_back(candidates[j]);
+                target -= candidates[j];
+                dfs(j);
+                target += candidates[j];
+                path.pop_back();
+            }
+        };
+        dfs(0);
         return ans;
-    }
-    void dfs(vector<int>& v, vector<int>& arr, int now, int target) {
-        if (target == 0) {
-            ans.push_back(v);
-            return;
-        }
-        for (int i = now; i < arr.size(); i++) {
-            if (arr[i] > target)    continue;
-            v.push_back(arr[i]);
-            dfs(v, arr, i, target - arr[i]);
-            v.pop_back();
-        }
     }
 };
