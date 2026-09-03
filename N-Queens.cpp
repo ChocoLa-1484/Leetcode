@@ -1,35 +1,24 @@
 class Solution {
 public:
-    vector<vector<string>> ans;
-    bool valid(vector<int>& pos, int row, int col) {
-        for (int r = 0; r < row; r++) {
-            int c = pos[r];
-            if (c == col)
-                return false;
-            if (abs(r - row) == abs(c - col))
-                return false;
-        }
-        return true;
-    }
-    void dfs(int n, int r, vector<int>& pos) {
-        if (r == n) {
-            vector<string> tmp(n, string(n, '.'));
-            for (int i = 0; i < n; i++) {
-                tmp[i][pos[i]] = 'Q';
-            }
-            ans.push_back(tmp);
-            return;
-        }
-        for (int c = 0; c < n; c++) {
-            if (!valid(pos, r, c))   continue;
-            pos[r] = c;
-            dfs(n, r + 1, pos);
-            pos[r] = -1;
-        }
-    }
     vector<vector<string>> solveNQueens(int n) {
-        vector<int> pos(n, -1);
-        dfs(n, 0, pos);
+        vector<vector<string>> ans;
+        vector<string> board(n, string(n, '.'));
+        vector<uint8_t> col(n), diag1((n << 1) - 1), diag2((n << 1) - 1);
+        auto dfs = [&](this auto&& dfs, int r) {
+            if (r == n) {
+                ans.emplace_back(board);
+                return;
+            }
+            for (int c = 0; c < n; c++) {
+                if (col[c] || diag1[r + c] || diag2[r - c + n - 1]) continue;
+                board[r][c] = 'Q';
+                col[c] = diag1[r + c] = diag2[r - c + n - 1] = true;
+                dfs(r + 1);
+                board[r][c] = '.';
+                col[c] = diag1[r + c] = diag2[r - c + n - 1] = false;
+            }
+        };
+        dfs(0);
         return ans;
     }
 };
