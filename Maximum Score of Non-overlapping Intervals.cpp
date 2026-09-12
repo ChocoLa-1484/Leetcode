@@ -35,3 +35,34 @@ public:
         return path.back().back();
     }
 };
+
+class Solution {
+public:
+    vector<int> maximumWeight(vector<vector<int>>& intervals) {
+        int n = intervals.size();
+        using T = array<int, 4>;
+        vector<T> v(n);
+        for (const auto& [i, x] : intervals | views::enumerate) {
+            v[i] = {x[1], x[0], x[2], static_cast<int>(-i)};
+        }
+        ranges::sort(v);
+        vector dp(n + 1, vector<pair<long long, vector<int>>>(5));
+        for (int i = 0; i < n; i++) {
+            auto [r, l, w, neg_idx] = v[i];
+            int j = lower_bound(v.begin(), v.begin() + i, l, [](const T& a, const int val) {
+                return a[0] < val;
+            }) - v.begin();
+            for (int k = 1; k <= 4; k++) {
+                auto skip = dp[i][k];
+                auto take = dp[j][k - 1];
+                take.first += w;
+                take.second.push_back(neg_idx);
+                ranges::sort(take.second, greater{});
+                dp[i + 1][k] = max(skip, take);
+            }
+        }
+        vector<int> ans = dp.back().back().second;
+        for (int& x : ans) x = -x;
+        return ans;
+    }
+};
