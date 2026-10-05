@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int scoreOfParentheses(string s) {
+        stack <int> st;
+        st.push(0);
+        for (const char c : s) {
+            if (c == '(') {
+                st.push(0);
+            } else {
+                int in = st.top();
+                st.pop();
+                st.top() += max(in << 1, 1);
+            }
+        }
+        return st.top();
+    }
+};
+
+class Solution {
+public:
+    int scoreOfParentheses(string s) {
+        int ans = 0;
+        for (int i = 0, depth = 0; i < s.length(); i++) {
+            depth += s[i] == '(' ? 1 : -1;
+            if (s[i] == ')' && s[i - 1] == '(')    ans += 1 << depth;
+        }
+        return ans;
+    }
+};
