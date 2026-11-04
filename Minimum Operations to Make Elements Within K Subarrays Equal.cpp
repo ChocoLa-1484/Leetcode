@@ -64,7 +64,6 @@ public:
             balance();
             cost[i - x + 1] = getCost();
         }
-
         vector<long long> dp(n + 1, 0);
         for (int j = 1; j <= k; ++j) {
             vector<long long> ndp(n + 1, INF);
